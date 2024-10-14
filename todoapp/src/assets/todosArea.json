@@ -1,0 +1,10 @@
+{
+    "todos": [
+      { "id": "N1", "category": "가사" },
+      { "id": "N2", "category": "공부" },
+      { "id": "N3", "category": "쇼핑" },
+      { "id": "N4", "category": "일상" },
+      { "id": "N5", "category": "약속 및 일정" }
+    ]
+  }
+  

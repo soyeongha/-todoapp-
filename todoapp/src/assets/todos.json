@@ -1,0 +1,54 @@
+{
+    "todos": [
+        {
+            "id": 1,
+            "title": "영어 공부하기",
+            "category": "공부",
+            "completed": false,
+            "status": "대기",
+            "satisfaction": 0,
+            "start": "2024-10-01",
+            "date": "2024-10-03"
+        },
+        {
+            "id": 2,
+            "title": "도시락통 설거지하기",
+            "category": "집안일",
+            "completed": false,
+            "status": "대기",
+            "satisfaction": 0,
+            "start": "2024-10-08",
+            "date": "2024-10-08"
+        },
+        {
+            "id": 3,
+            "title": "친구랑 약속",
+            "category": "약속 및 일정",
+            "completed": false,
+            "status": "대기",
+            "satisfaction": 0,
+            "start": "2024-10-12",
+            "date": "2024-10-12"
+        },
+        {
+            "id": 4,
+            "title": "물 4잔 마시기",
+            "category": "일상",
+            "completed": false,
+            "status": "대기",
+            "satisfaction": 0,
+            "start": "2024-11-05",
+            "date": "2024-11-05"
+        },
+        {
+            "id": 5,
+            "title": "일본 여행",
+            "category": "약속 및 일정",
+            "completed": false,
+            "status": "대기",
+            "satisfaction": 0,
+            "start": "2024-10-31",
+            "date": "2024-11-02"
+        }
+    ]
+}
