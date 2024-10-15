@@ -1,10 +1,19 @@
-완전 괜찮은 상태 Todolist
 <template>
   <div>
     <TodoHeader />
-    <div class="todo-app">
+       <!-- 사이드바 -->
+      <div id="sidebar-item">
+        <div class="draggable-item" draggable="true" @dragstart="onDragStart" data-title="빨래" data-category="집안일">빨래</div>
+        <div class="draggable-item" draggable="true" @dragstart="onDragStart" data-title="공부" data-category="공부">공부</div>
+        <div class="draggable-item" draggable="true" @dragstart="onDragStart" data-title="독서" data-category="취미">독서</div>
+        <div class="draggable-item" draggable="true" @dragstart="onDragStart" data-title="운동" data-category="운동">일상</div>
+      </div>
+    
+     <!-- TodoList 테이블 영역 -->
+    <div class="todo-app" @dragover.prevent @drop="onDrop">
       <h1 style="margin-bottom: 40px; margin-top: -20px">Todo List</h1>
       <div ref="tabulatorRef"></div>
+      
       <div class="new-todo">
         <select v-model="selectedCategory" class="category-select">
           <option disabled value="">카테고리 선택</option>
@@ -69,6 +78,9 @@ export default {
     const route = useRoute(); // 현재 라우트에서 query 파라미터를 받기 위해
     const tabulatorRef = ref(null); // Tabulator 테이블 DOM 참조
     const table = ref(null); // Tabulator 인스턴스
+    const draggedItem = ref(null); // 드래그된 항목을 저장
+    
+
 
     onMounted(() => {
       initializeTable(); // 테이블 초기화
@@ -112,6 +124,31 @@ export default {
   },
   { immediate: true } // 컴포넌트가 로드될 때에도 바로 실행되도록 설정
 );
+
+//onDragStart함수에서 저장해온 항목을 가져와서 테이블에 들어갈 수 있도록 재설정하는 함수
+  const onDrop = () => {
+    if (draggedItem.value) {
+      const newRow = {
+        id: todos.value.length + 1, // No는 현재 데이터 개수 +1
+        title: draggedItem.value.title, // 드래그한 항목의 제목
+        category: draggedItem.value.category, // 카테고리
+        date: new Date().toISOString().split('T')[0], // 오늘 날짜
+        status: "대기", // 상태
+        satisfaction: 0, // 기본 만족도
+      };
+      table.value.addRow(newRow); // 테이블에 새로운 행 추가
+      todos.value.push(newRow); // todos 배열에도 추가
+      
+      draggedItem.value = null; // 드래그 항목 초기화
+    }
+  };
+
+  const onDragStart = (event) => {
+  draggedItem.value = {
+    title: event.target.getAttribute("data-title"), // 드래그한 항목의 제목
+    category: event.target.getAttribute("data-category"), // 카테고리
+    };
+  };  
 
     // handleIconClick 함수 정의 추가
     const handleIconClick = (e, cell) => {
@@ -254,24 +291,24 @@ export default {
         ],
       });
     };
-    // 상태 변경 함수
-    const changeStatus = (id) => {
-      const todo = todos.value.find((todo) => todo.id === id);
-      if (todo) {
-        // 상태를 순차적으로 변경 (대기 → 완료 → 취소 → 대기)
-        if (todo.status === "대기") {
-          todo.status = "완료";
-        } else if (todo.status === "완료") {
-          todo.status = "취소"; // 취소 상태일 경우 만족도 초기화
-          todo.satisfaction = 0;
-        } else {
-          todo.status = "대기";
+      // 상태 변경 함수
+      const changeStatus = (id) => {
+        const todo = todos.value.find((todo) => todo.id === id);
+        if (todo) {
+          // 상태를 순차적으로 변경 (대기 → 완료 → 취소 → 대기)
+          if (todo.status === "대기") {
+            todo.status = "완료";
+          } else if (todo.status === "완료") {
+           todo.status = "취소"; // 취소 상태일 경우 만족도 초기화
+            todo.satisfaction = 0;
+          } else {
+            todo.status = "대기";
+         }
+          table.value.updateData([
+            { id, status: todo.status, satisfaction: todo.satisfaction },
+          ]);
         }
-        table.value.updateData([
-          { id, status: todo.status, satisfaction: todo.satisfaction },
-        ]);
-      }
-    };
+      };
 
     const addTodo = () => {
       if (
@@ -323,6 +360,8 @@ export default {
       addTodo,
       changeStatus,
       filterTodosByDate,
+      onDrop,  // onDrop 함수 추가
+      onDragStart,  // onDragStart 함수도 추가해야 함
     };
   },
 };
@@ -349,12 +388,36 @@ export default {
   width: 15%;
   padding: 10px;
   margin-right: 20px;
-  border: 1px solid #ffe0f5;
+  border: 1px solid #ffe6f0;
   border-radius: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .star-icon {
   cursor: pointer;
+}
+
+
+#sidebar-item{
+  padding: 30px;
+  margin: 50px auto;
+  float: left;
+  border: 1px solid #ffe0f5;
+  background-color: #ffdaea;
+  border-radius: 16px;
+  font-weight: 500;
+  font-family:  'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif,'#ccc';
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+}
+.draggable-item {
+  margin-bottom: 10px;
+  margin: 40% auto;
+  padding: 30px;
+  border: 1px solid #ffabd9;
+  border-radius: 50%;
+  background-color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>

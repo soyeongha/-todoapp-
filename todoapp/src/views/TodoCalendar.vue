@@ -28,6 +28,7 @@ export default {
     const events = ref([]); // 캘린더에 표시할 이벤트 목록
     const todos = ref(todosData.todos); // JSON 데이터를 반응형으로 관리
     const router = useRouter(); // 라우터 사용 정의
+    
 
      // `end` 날짜에 하루를 더해 FullCalendar에 표시되도록 처리
      const addOneDay = (dateStr) => {
@@ -57,6 +58,9 @@ export default {
         console.log("Updated events: ", events.value); // 업데이트된 이벤트 확인
       }
     };
+    
+
+
 
     // 날짜 클릭 시 TodoList로 이동
     const handleDateClick = (info) => {
